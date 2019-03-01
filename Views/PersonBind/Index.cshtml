@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ABC.FaceSign.AIAPI.Models.PersonUserDataBind>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>签到列表</h2>
+
+
+<table class="table">
+    <tr>
+        
+        <th>
+            姓名
+        </th>
+        <th>
+            微信昵称
+        </th>
+        <th>
+            签到时间
+        </th>
+        <th>
+            公司
+        </th>
+        <th>
+            手机号码
+        </th>
+        <th>
+            邮箱
+        </th>
+        
+        <th>
+            国际
+        </th>
+        <th>
+            省
+        </th>
+        <th>
+           市
+        </th>
+        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WebChartNickName)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.CreateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Company)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+      
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Province)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+       
+        
+    </tr>
+}
+
+</table>

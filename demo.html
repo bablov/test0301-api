@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+    function createPersonGroup(personGropupKey) {
+        $.ajax({
+            url: "http://localhost:3885/persons/group/" + personGropupKey + "",
+            dataType: 'json',
+            type: "Post",
+            async: false,
+            success: function(result) {
+                return result.personGroupID;
+            },
+            error: function(result) {
+                console.log(result);
+                return "";
+            }
+        });
+    };
+
+    function createPerson(personGropupKey) {
+        $.ajax({
+            url: "http://localhost:3885/persons/person/persongroup/" + personGropupKey + "",
+            dataType: 'json',
+            type: "Post",
+            async: false,
+            success: function(result) {
+                return result.personKey;
+            },
+            error: function(result) {
+                console.log(result);
+                return "";
+            }
+        });
+    };
+
+    function createTempPerson(personGropupKey) {
+        $.ajax({
+            url: "http://localhost:3885/persons/person/persongroup/" + personGropupKey + "/temp",
+            dataType: 'json',
+            type: "Post",
+            async: false,
+            success: function(result) {
+                return result.personKey;
+            },
+            error: function(result) {
+                console.log(result);
+                return "";
+            }
+        });
+    };
+
+    $(function() {
+        $("#createPersonGroup").click(function() {
+            var personGropupKey = $("#personGropupKey").val();
+            if (personGropupKey == "") {
+                alert("请填写组名!");
+            }
+            $.ajax({
+                url: "http://localhost:3885/persons/group/" + personGropupKey + "",
+                dataType: 'json',
+                type: "Post",
+                async: false,
+                success: function(result) {
+                    var personGroupID = result.personGroupID;
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+
+            $.ajax({
+                url: "http://localhost:3885/persons/person/persongroup/" + personGropupKey + "",
+                dataType: 'json',
+                type: "Post",
+                async: false,
+                success: function(result) {
+                    personKey = result.personKey;
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+
+            var personKey = "";
+            $.ajax({
+                url: "http://localhost:3885/persons/person/persongroup/" + personGropupKey + "",
+                dataType: 'json',
+                type: "Post",
+                async: false,
+                success: function(result) {
+                    personKey = result.personKey;
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+
+            $.ajax({
+                url: "http://localhost:3885/persons/face/initialize/" + personGropupKey + "/" + personKey + "",
+                dataType: 'json',
+                type: "POST",
+                success: function(result) {
+                    alert("创建成功!");
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                    return "";
+                }
+            });
+        });
+
+        $("#renamePersonGroup").click(function() {
+            var oldPersonGropupKey = $("#oldPersonGropupKey").val();
+            var newPersonGropupKey = $("#newPersonGropupKey").val();
+
+            if (oldPersonGropupKey == "" || newPersonGropupKey == "") {
+                alert("请填写组名!");
+            }
+
+            $.ajax({
+                url: "http://localhost:3885/persons/group/rename/" + oldPersonGropupKey + "/" + newPersonGropupKey + "",
+                dataType: 'json',
+                type: "Put",
+                success: function(result) {
+                    alert("重命名personGropup成功!");
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        });
+        $("#searchPersonGroup").click(function() {
+            var searchPersonGroupKey = $("#txt_searchPersonGropupKey").val();
+            $.ajax({
+                url: "http://localhost:3885/persons/group/trainstatus/" + searchPersonGroupKey + "",
+                dataType: 'json',
+                type: "Get",
+                success: function(result) {
+                    $("#searchPersonGroup").after("<p>" + result + "</p>");
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        });
+        $("#btnMergePersons").click(function() {
+            var personKeys = $("#txtMergePersons").val();
+            $.ajax({
+                url: "http://localhost:3885/persons/person/merge/personGroup/test/person/" + personKeys + "",
+                dataType: 'json',
+                type: "Put",
+                success: function(result) {
+                    $("#btnMergePersons").after("<p>" + result + "</p>");
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#btnDeletePersonGroup").click(function() {
+            var deletePersonGroupKey = $("#deletePersonGroupKey").val();
+            $.ajax({
+                url: "http://localhost:3885/persons/group/" + deletePersonGroupKey + "",
+                dataType: 'json',
+                type: "Delete",
+                success: function(result) {
+                    alert("删除成功!");
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#btnTrainPersonGroup").click(function() {
+            var deletePersonGroupKey = $("#trainPersonGroupKey").val();
+            $.ajax({
+                url: "http://localhost:3885/persons/group/" + deletePersonGroupKey + "/train",
+                dataType: 'json',
+                type: "Post",
+                success: function(result) {
+                    alert("训练成功!");
+                    console.log(result);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        });
+
+        $("#btnWeChat").click(function() {
+            var config = "";
+            $.ajax({
+                async: false,
+                //url: "persons/demo/bindByFaceID/c9248a9f-828b-418f-98b2-0f897ab957ec",
+                url:"http://nfacesignaiapi1.chinacloudsites.cn/persons/demo/bindByFaceID/ca429ab4-3135-4068-8c15-ac152cb7417c",
+                type: "Post",
+                data: '{"webChartNickName":"贝贝","userName":"贝贝","WebOpenID":"test2","country":"中国","province":"上海","city":"黄浦","company":"夏威濠","email":"夏威濠","phone":"夏威濠"}',//,silimarFaceID:08b8f172-f529-4b7a-984d-f78973356a71
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(errormsg) {
+                    console.log(errormsg);
+                }
+            });
+        });
+    });
+    </script>
+</head>
+
+<body>
+    personGropupKey:
+    <input type="text" name="" id="personGropupKey" />
+    <button id="createPersonGroup">创建新的personGropup</button>
+    <br/>
+    <br/> 旧组的personGroupKey:
+    <input type="text" name="" id="oldPersonGropupKey" />
+    <br/> 新组的personGroupKey:
+    <input type="text" name="" id="newPersonGropupKey" />
+    <br/>
+    <button id="renamePersonGroup">重命名personGropup</button>
+    <br/> personGropupKey:
+    <input type="text" name="" id="txt_searchPersonGropupKey" />
+    <button id="searchPersonGroup">查询组的训练状态</button>
+    <br/> 要合并的PersonKey:
+    <textarea id="txtMergePersons"></textarea>
+    <button id="btnMergePersons">合并person</button>
+    <br /> 删除组:
+    <input type="text" name="" id="deletePersonGroupKey" />
+    <br />
+    <button id="btnDeletePersonGroup">删除组</button>
+    <br /> 训练组:
+    <input type="text" name="" id="trainPersonGroupKey" />
+    <br />
+    <button id="btnTrainPersonGroup">训练组</button>
+    <br />
+    <button id="btnWeChat">微信接口测试</button>
+</body>
+
+</html>
